@@ -1,6 +1,12 @@
 # Example ConfigServer
 .Net Core Web API example
 
+## Overview
+The system is a simple customer configuration api, each customer can have a whole tree of configuration 
+information stored against their account. The api allows the consumer to manage the information and query
+the config.
+
+## How and Why
 This example demonstrates the used of the .NET Core and the MVC Web API features.
 
 - **Focus** -- The primary focus of this repo is to have code for discussion with colleagues.
