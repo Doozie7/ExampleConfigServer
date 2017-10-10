@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using ConfigService.Model;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.AspNetCore.Routing;
 
 namespace ConfigService.Api.Controllers
 {
@@ -38,15 +42,46 @@ namespace ConfigService.Api.Controllers
         {
             _logger.LogDebug("Writing to the log for Echo controller.");
 
-            var info = new {
+            var routes = GetRouteDetails(RouteData.Routers.OfType<RouteCollection>().FirstOrDefault());
+
+            var info = new
+            {
                 ServerTimeUTC = $"{DateTime.UtcNow}",
-                ServerName = System.Environment.MachineName,
+                ServerName = Environment.MachineName,
                 ExecutingAssembly = Assembly.GetExecutingAssembly().FullName,
                 UserName = User.Identity.Name ?? "<NotSet>",
-                CustomerRepository = _repository.GetType().AssemblyQualifiedName
-            };            
+                CustomerRepository = _repository.GetType().AssemblyQualifiedName,
+                Routes = routes
+            };
 
             return Ok(info);
+        }
+
+        private static IList<string> GetRouteDetails(RouteCollection routeCollection)
+        {
+            // There be dragons here (reflection and numberd array's
+            var results = new List<string>();
+            var type = routeCollection.GetType();
+
+            if (type.Name == "RouteCollection")
+            {
+                var routes = (IList)routeCollection.GetType()
+                    .GetField("_routes", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(routeCollection);
+
+                var ar = routes[0];
+
+                var actions = (ActionDescriptorCollectionProvider)ar.GetType()
+                    .GetField("_actionDescriptorCollectionProvider", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetValue(ar);
+
+                foreach (var action in actions.ActionDescriptors.Items)
+                {
+                    results.Add($"{action.DisplayName}, Uri: {action.AttributeRouteInfo.Template}");
+                }
+            }
+
+            return results;
         }
     }
 }
