@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.7.137" />
+    <PackageReference Include="xunit" Version="2.3.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConfigService.Api\ConfigService.Api.csproj" />
+    <ProjectReference Include="..\ConfigService.Model\ConfigService.Model.csproj" />
+    <ProjectReference Include="..\ConfigService.Repository.InMemory\ConfigService.Repository.InMemory.csproj" />
+  </ItemGroup>
+
+</Project>
