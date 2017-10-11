@@ -6,6 +6,13 @@ The system is a simple customer configuration api, each customer can have a whol
 information stored against their account. The api allows the consumer to manage the information and query
 the config.
 
+## Libs used
+- Swashbuckle.AspNetCore
+- Moq
+- xunit
+- Newtonsoft.Json
+- Microsoft.EntityFrameworkCore.SqlServer
+
 ## How and Why
 This example demonstrates the used of the .NET Core and the MVC Web API features.
 
