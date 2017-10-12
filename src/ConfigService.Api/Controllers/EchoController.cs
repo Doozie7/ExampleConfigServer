@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
@@ -8,7 +8,6 @@ using System.Reflection;
 using ConfigService.Model;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Routing;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ConfigService.Api.Controllers
 {
@@ -35,8 +34,9 @@ namespace ConfigService.Api.Controllers
         /// <summary>
         /// Get basic information about the api
         /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [SwaggerResponse(200, typeof(string), "Running system information")]
+        [ProducesResponseType(typeof(string), 200)]
         [Produces("application/json")]
         public IActionResult Get()
         {
