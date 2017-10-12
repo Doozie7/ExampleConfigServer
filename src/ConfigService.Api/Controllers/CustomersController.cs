@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ConfigService.Api.ViewModels;
@@ -67,6 +67,26 @@ namespace ConfigService.Api.Controllers
         }
 
         /// <summary>
+        /// Get a customers settings
+        /// </summary>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        [HttpGet("{customerid}/settings", Name = "GetCustomersSettings")]
+        [SwaggerResponse(200, typeof(List<Setting>), "Get a customers settings")]
+        [SwaggerResponse(404, null, "A customer with the provided Id was not found")]
+        public IActionResult GetCustomerSettings(Guid customerId)
+        {
+            var customer = _repository.GetListOf(c => c.Id == customerId, c => c.Name).SingleOrDefault();
+            if (customer == null)
+            {
+                _logger.LogError($"No customer found with the id of {customerId}");
+                return NotFound();
+            }
+
+            return RedirectToRoute("GetSettingsForCustomer", customerId);
+        }
+
+        /// <summary>
         /// Create a new customer
         /// </summary>
         /// <param name="customerFromPost"></param>
@@ -77,6 +97,7 @@ namespace ConfigService.Api.Controllers
         {
             if (customerFromPost == null)
             {
+                _logger.LogError("The customer from a Post was null.");
                 return BadRequest();
             }
 
@@ -109,6 +130,7 @@ namespace ConfigService.Api.Controllers
             var customer = _repository.GetListOf(c => c.Id == id).SingleOrDefault();
             if (customer == null)
             {
+                _logger.LogError("Could not delete customer with the id {id} as it does not exist in the repository.");
                 return NotFound();
             }
 
