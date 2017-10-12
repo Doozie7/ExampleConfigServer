@@ -1,4 +1,4 @@
-﻿using ConfigService.Model;
+using ConfigService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -31,7 +31,7 @@ namespace ConfigService.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_repository.GetListOf(c => c.Enabled == true, c => c.Id));
+            return Ok(_repository.GetListOf(c => c.Enabled, c => c.Id));
         }
     }
 }
