@@ -1,4 +1,6 @@
-﻿using System.IO;
+// ReSharper disable ClassNeverInstantiated.Global
+
+using System.IO;
 using ConfigService.Model;
 using ConfigService.Repository.Sql;
 using Microsoft.AspNetCore.Builder;
@@ -8,8 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
-using Microsoft.AspNetCore.Authentication;
-// ReSharper disable ClassNeverInstantiated.Global
 
 namespace ConfigService.Api
 {
