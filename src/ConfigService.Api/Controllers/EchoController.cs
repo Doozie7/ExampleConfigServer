@@ -17,17 +17,27 @@ namespace ConfigService.Api.Controllers
     [Route("api/[controller]")]
     public class EchoController : Controller
     {
-        private readonly IRepository<Customer> _repository;
+        private readonly IRepository<Customer> _customerRepo;
+        private readonly IRepository<Setting> _settingsRepo;
+        private readonly IRepository<SettingType> _settingTypesRepo;
         private readonly ILogger<CustomersController> _logger;
 
         /// <summary>
         /// The constructor requires the logging framework
         /// </summary>
-        /// <param name="repository"></param>
+        /// <param name="customerRepo"></param>
+        /// <param name="settingTypesRepo"></param>
         /// <param name="logger"></param>
-        public EchoController(IRepository<Customer> repository, ILogger<CustomersController> logger)
+        /// <param name="settingsRepo"></param>
+        public EchoController(
+            IRepository<Customer> customerRepo, 
+            IRepository<Setting> settingsRepo, 
+            IRepository<SettingType> settingTypesRepo, 
+            ILogger<CustomersController> logger)
         {
-            _repository = repository;
+            _customerRepo = customerRepo;
+            _settingsRepo = settingsRepo;
+            _settingTypesRepo = settingTypesRepo;
             _logger = logger;
         }
 
@@ -50,7 +60,9 @@ namespace ConfigService.Api.Controllers
                 ServerName = Environment.MachineName,
                 ExecutingAssembly = Assembly.GetExecutingAssembly().FullName,
                 UserName = User.Identity.Name ?? "<NotSet>",
-                CustomerRepository = _repository.GetType().AssemblyQualifiedName,
+                CustomerRepository = _customerRepo.GetType().AssemblyQualifiedName,
+                SettingsRepository = _settingsRepo.GetType().AssemblyQualifiedName,
+                SettingTypesRepository = _settingTypesRepo.GetType().AssemblyQualifiedName,
                 Routes = routes
             };
 

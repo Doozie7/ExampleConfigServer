@@ -5,6 +5,7 @@ using ConfigService.Api.ViewModels;
 using ConfigService.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ConfigService.Api.Controllers
@@ -45,7 +46,7 @@ namespace ConfigService.Api.Controllers
         }
 
         /// <summary>
-        /// Get a customer by Id
+        /// Get a customer
         /// </summary>
         /// <remarks>
         /// Returns a customer.
@@ -87,12 +88,13 @@ namespace ConfigService.Api.Controllers
         }
 
         /// <summary>
-        /// Create a new customer
+        /// Add a customer
         /// </summary>
         /// <param name="customerFromPost"></param>
         /// <returns></returns>
         [HttpPost]
         [SwaggerResponse(201, typeof(Customer), "Add a customer")]
+        [SwaggerResponse(400, typeof(string), "Bad request, data validation error or possible duplicate")]
         public IActionResult Post([FromBody] CustomerFromPost customerFromPost)
         {
             if (customerFromPost == null)
@@ -110,13 +112,20 @@ namespace ConfigService.Api.Controllers
                 Name = customerFromPost.Name,
             };
 
-            _repository.Add(customer);
-
-            return CreatedAtRoute("GetCustomer", new { id = customer.Id }, customer);
+            var count = _repository.GetListOf(c => c.Name == customer.Name).Count;
+            if (count == 0)
+            {
+                _repository.Add(customer);
+                return CreatedAtRoute("GetCustomer", new {id = customer.Id}, customer);
+            }
+            else
+            {
+                return BadRequest("Duplicate found.");
+            }
         }
 
         /// <summary>
-        /// Delete a customer by Id
+        /// Delete a customer
         /// </summary>
         /// <remarks>
         /// Returns no content response
