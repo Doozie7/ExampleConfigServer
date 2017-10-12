@@ -1,7 +1,8 @@
-﻿// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ClassNeverInstantiated.Global
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ConfigService.Model;
 using Microsoft.Extensions.Logging;
 
@@ -10,24 +11,57 @@ namespace ConfigService.Repository.InMemory
     public class SettingsRepository : IRepository<Setting>
     {
         private readonly ILogger<SettingsRepository> _logger;
+        private static IList<Setting> _settings;
 
         public SettingsRepository(ILogger<SettingsRepository> logger)
         {
             _logger = logger;
+
+            if (_settings == null)
+            {
+                _settings = GetInitialSettingsList();
+            }
         }
 
-        /// <summary>
-        /// Get a list of Settings using a filter, order and by default take 1000 and skip 0
-        /// </summary>
-        /// <param name="filter">The where clase in the query e.g. c =&gt; c != null</param>
-        /// <param name="order">The order by clause in the query e.g. c =&gt; c.Name</param>
-        /// <param name="take">by default take 1000</param>
-        /// <param name="skip">by default skip 0</param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public IList<Setting> GetListOf(Func<Setting, bool> filter = null, Func<Setting, object> order = null, int take = 1000, int skip = 0)
         {
             _logger.LogWarning($"Using the InMemory {typeof(SettingsRepository).AssemblyQualifiedName}!");
 
+            if (filter == null)
+            {
+                filter = c => c != null;
+            }
+
+            if (order == null)
+            {
+                order = c => c.Id;
+            }
+
+            return _settings.Where(filter).OrderBy(order).Take(take).Skip(skip).ToList();
+        }
+
+        /// <inheritdoc />
+        public Setting Add(Setting itemToAdd)
+        {
+            _settings.Add(itemToAdd);
+            return itemToAdd;
+        }
+
+        /// <inheritdoc />
+        public void Delete(Func<Setting, bool> filter = null)
+        {
+            filter = filter ?? (c => c != null);
+            var toDelete = _settings.Where(filter).ToList();
+
+            foreach (var settingToDelete in toDelete)
+            {
+                _settings.Remove(settingToDelete);
+            }
+        }
+
+        private static IList<Setting> GetInitialSettingsList()
+        {
             var customer = new Customer
             {
                 Id = new Guid("65e51c54-21c5-41e8-8e22-21500379b275"),
@@ -78,18 +112,6 @@ namespace ConfigService.Repository.InMemory
             };
 
             return settings;
-        }
-
-
-        /// <inheritdoc />
-        public Setting Add(Setting itemToAdd)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Func<Setting, bool> filter = null)
-        {
-            throw new NotImplementedException();
         }
     }
 }
