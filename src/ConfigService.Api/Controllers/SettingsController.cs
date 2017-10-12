@@ -28,7 +28,7 @@ namespace ConfigService.Api.Controllers
             _repository = repository;
             _logger = logger;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,7 +36,7 @@ namespace ConfigService.Api.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_repository.GetListOf(c => c != null == true, c => c.CustomerId));
+            return Ok(_repository.GetListOf(c => c != null, c => c.CustomerId));
         }
 
         /// <summary>
@@ -98,9 +98,11 @@ namespace ConfigService.Api.Controllers
                 return BadRequest();
             }
 
+            var maxSettinId = _repository.GetListOf().OrderByDescending(item => item.Id).First().Id;
+
             var setting = new Setting()
             {
-                Id = settingFromPost.Id,
+                Id = maxSettinId + 1,
                 CustomerId = settingFromPost.CustomerId,
                 SettingTypeId = settingFromPost.SettingTypeId,
                 SettingValue = settingFromPost.SettingValue,
