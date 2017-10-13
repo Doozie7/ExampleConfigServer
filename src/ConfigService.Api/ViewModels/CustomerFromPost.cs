@@ -16,7 +16,7 @@ namespace ConfigService.Api.ViewModels
         public string Description { get; set; }
 
         /// <summary>
-        /// Is the customer enabled at firt creation time
+        /// Is the customer enabled at first creation time
         /// </summary>
         public bool Enabled { get; set; }
     }
