@@ -27,7 +27,7 @@ This example demonstrates the used of the .NET Core and the MVC Web API features
 - **Platforms** -- This code is designed to run .NET Core so hopefully run anyware.
 - **Open Source** -- The MIT license is applied to the code.
 
-## Architecture
+## Build and Release
 
-This set of projects contains the web api, some models, repositories (in memory and sql) and the unit tests as expected).
+Behind the scenes each time a change is checked into the master branch a build is started on a Visual Studio Team Services.
 
