@@ -6,6 +6,16 @@ The system is a simple customer configuration api, each customer can have a whol
 information stored against their account. The api allows the consumer to manage the information and query
 the config.
 
+## Code Structure
+The source code is made up of a number of projects. 
+- ConfigService.Api, this is a .net core API with swagger documentation
+- ConfigService.Database, the sql database definition
+- ConfigService.Model, the poco that form the OO model
+- ConfigService.Repository.Sql, the sql repository
+- ConfigService.Repository.InMemory, an in memory testing repository and used by the unit tests
+- ConfigService.Api.Tests, the Api unit tests
+- ConfigService.WinFormsApp, a windows forms application to manage the SettingTypes
+
 ## Libs used
 - Swashbuckle.AspNetCore
 - Moq
