@@ -11,7 +11,7 @@ The source code is made up of a number of projects.
 - ConfigService.Repository.Sql, the sql repository
 - ConfigService.Repository.InMemory, an in memory testing repository and used by the unit tests
 - ConfigService.Api.Tests, the Api unit tests
-- ConfigService.WinFormsApp, a windows forms application to manage the SettingTypes
+- ConfigService.WinFormsApp, a windows forms application for managing the SettingTypes
 
 ## Libs used
 - Swashbuckle.AspNetCore
